@@ -1,6 +1,5 @@
 # Sense Hat CPU LED Matrix monitor 
 # author M. Manojlovic synchromatik@gmail.com
-# TODO: Per Core Switch Monitor
 
 from sense_hat import SenseHat
 from scipy.interpolate import interp1d
@@ -52,30 +51,17 @@ print('Script runing, check leds')
 #update array in realtime cpu load
 #display to the led
 while True:
-    #Repeating 8 times, for 8 rows total on LED Matrix
-    #updatedArray = constructArray(interp1d([0, 100], [0, 8])(psutil.cpu_percent()).round(0)).tolist() * 8
-    #float list to int list
-    #final = list(map(int, updatedArray))
-    #to char list along conversion of corresponding load to letter for coloring purpose
-    #led = arrayToCollor(final)
-    percore = psutil.cpu_percent(percpu=True)
-    percorelinear = interp1d([0, 100], [0, 8])(percore).round(0).tolist() 
+    percorelinear = interp1d([0, 100], [0, 8])(psutil.cpu_percent(percpu=True)).round(0).tolist() 
     output = [constructArray(i) for i in percorelinear] 
     for e in output:
-        a = arrayToCollor(list(map(int, e))) * 2
-        load.insert(0, a)
+        load.insert(0, arrayToCollor(list(map(int, e))) * 2)
     load = list(chain.from_iterable(load))
     for e in load:
-        x = colors[e]
-        loadfinal.insert(0, x)
-    print(loadfinal)
+        loadfinal.insert(0, colors[e])
+    # print(percorelinear)
     sense.set_pixels(loadfinal)
     time.sleep(1)
     load.clear()
     loadfinal.clear()
-    # print(load)
-
-    # time.sleep(5)
-    # loadfinal.clear()
     
 
