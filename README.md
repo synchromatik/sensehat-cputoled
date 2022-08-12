@@ -11,5 +11,6 @@ Monitors your PIs cpu load and display it to the LED Matrix
 
 ```bash
   python cputoled.py
+  python cputoled-percore.py
 ```
     
